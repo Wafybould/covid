@@ -1,0 +1,13 @@
+SearchUser.class
+Register.class
+Login.class
+GetFriends.class
+ShowUser.class
+HandleRequest.class
+AddFriend.class
+DBConnect.class
+Logout.class
+HandleNotif.class
+GetNotifs.class
+GetActivities.class
+DelFriend.class
