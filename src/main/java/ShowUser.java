@@ -55,7 +55,7 @@ public class ShowUser extends HttpServlet {
                 }
             }
             st.close();
-            st = con.prepareStatement("select login, name, surname, birthday from users where id=?");
+            st = con.prepareStatement("select login, name, surname, birthday, admin from users where id=?");
             st.setInt(1, userId);
             rs = st.executeQuery();
             rs.next();
@@ -63,13 +63,15 @@ public class ShowUser extends HttpServlet {
             String userName = rs.getString(2);
             String userSurname = rs.getString(3);
             String userBirthday = rs.getString(4);
+            Boolean isAdmin = rs.getBoolean(5);
             st.close();
-            st = con.prepareStatement("select name, surname from users where id = ?");
+            st = con.prepareStatement("select name, surname, admin from users where id = ?");
             st.setInt(1, id);
             rs = st.executeQuery();
             rs.next();
             String name = rs.getString(1);
             String surname = rs.getString(2);
+            Boolean admin = rs.getBoolean(3);
             st.close();
             con.close();
             request.setAttribute("userId", userId);
@@ -77,11 +79,13 @@ public class ShowUser extends HttpServlet {
             request.setAttribute("userName", userName);
             request.setAttribute("userSurname", userSurname);
             request.setAttribute("userBirthday", userBirthday);
+            request.setAttribute("isAdmin", isAdmin);
             request.setAttribute("isFriend", isFriend);
             request.setAttribute("reqSent", reqSent);
             request.setAttribute("hasSent", hasSent);
             request.setAttribute("name", name);
             request.setAttribute("surname", surname);
+            request.setAttribute("admin", admin);
             RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/showUser.jsp");
             view.forward(request, response);
         } catch (SQLException e) {

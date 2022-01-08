@@ -50,12 +50,13 @@ public class GetNotifs extends HttpServlet {
                 numNotifs++;
             }
             st.close();
-            st = con.prepareStatement("select name, surname from users where id = ?");
+            st = con.prepareStatement("select name, surname, admin from users where id = ?");
             st.setInt(1, id);
             rs = st.executeQuery();
             rs.next();
             String name = rs.getString(1);
             String surname = rs.getString(2);
+            Boolean admin = rs.getBoolean(3);
             st.close();
             con.close();
             request.setAttribute("numNotifs", numNotifs);
@@ -68,6 +69,7 @@ public class GetNotifs extends HttpServlet {
             request.setAttribute("who", who);
             request.setAttribute("name", name);
             request.setAttribute("surname", surname);
+            request.setAttribute("admin", admin);
             RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/notifs.jsp");
             view.forward(request, response);
         } catch (SQLException e) {

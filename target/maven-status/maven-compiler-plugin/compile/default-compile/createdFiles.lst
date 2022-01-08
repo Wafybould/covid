@@ -4,7 +4,10 @@ CreateActivity.class
 Login.class
 GetFriends.class
 ShowUser.class
+DelArea.class
 HandleRequest.class
+ManageAdmin.class
+GetAreas.class
 AddFriend.class
 DBConnect.class
 Logout.class
@@ -14,6 +17,7 @@ GetNotifs.class
 DelActivity.class
 GetActivities.class
 DelFriend.class
+DelUser.class
 JoinActivity.class
 Covided.class
 UpdateProfile.class

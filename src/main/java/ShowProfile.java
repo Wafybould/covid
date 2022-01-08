@@ -27,6 +27,7 @@ public class ShowProfile extends HttpServlet {
             String name = rs.getString(4);
             String surname = rs.getString(5);
             Date birthday = rs.getDate(6);
+            Boolean admin = rs.getBoolean(7);
             st.close();
             con.close();
             request.setAttribute("login", login);
@@ -34,6 +35,7 @@ public class ShowProfile extends HttpServlet {
             request.setAttribute("name", name);
             request.setAttribute("surname", surname);
             request.setAttribute("birthday", birthday);
+            request.setAttribute("admin", admin);
             RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/showProfile.jsp");
             view.forward(request, response);
         } catch (SQLException e) {

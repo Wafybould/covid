@@ -41,7 +41,7 @@ public class Register extends HttpServlet{
 
             Connection con = DBConnect.initializeDatabase();
 
-            PreparedStatement st = con.prepareStatement("insert into users (login, password, name, surname, birthday) values(?,?,?,?,?)");
+            PreparedStatement st = con.prepareStatement("insert into users (login, password, name, surname, birthday, admin) values(?,?,?,?,?,0)");
 
             st.setString(1, login);
             st.setString(2, pass);

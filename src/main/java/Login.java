@@ -42,7 +42,7 @@ public class Login extends HttpServlet {
 
                 rs.next();
                 if (rs.getInt(1) != 0) {
-                    st = con.prepareStatement("select id, name, surname from users where login=? and password=?");
+                    st = con.prepareStatement("select id, name, surname, admin from users where login=? and password=?");
                     st.setString(1, login);
                     st.setString(2, pass);
                     rs = st.executeQuery();
@@ -50,11 +50,13 @@ public class Login extends HttpServlet {
                     int id = rs.getInt(1);
                     String name = rs.getString(2);
                     String surname = rs.getString(3);
+                    Boolean admin = rs.getBoolean(4);
                     st.close();
                     con.close();
                     session.setAttribute("id", id);
                     request.setAttribute("name", name);
                     request.setAttribute("surname", surname);
+                    request.setAttribute("admin", admin);
                     RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/home.jsp");
                     view.forward(request, response);
                 } else {
@@ -67,16 +69,18 @@ public class Login extends HttpServlet {
             }else{
                 int id = (int)session.getAttribute("id");
                 Connection con = DBConnect.initializeDatabase();
-                PreparedStatement st = con.prepareStatement("select name, surname from users where id=?");
+                PreparedStatement st = con.prepareStatement("select name, surname, admin from users where id=?");
                 st.setInt(1, id);
                 ResultSet rs = st.executeQuery();
                 rs.next();
                 String name = rs.getString(1);
                 String surname = rs.getString(2);
+                Boolean admin = rs.getBoolean(3);
                 st.close();
                 con.close();
                 request.setAttribute("name", name);
                 request.setAttribute("surname", surname);
+                request.setAttribute("admin", admin);
                 RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/home.jsp");
                 view.forward(request, response);
             }

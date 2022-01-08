@@ -21,6 +21,9 @@
         <li><form action="/getnotifs" method="post"><input type="submit" value="Notifications"></form></li>
         <li><form action="/searchuser" method="post"><input type="submit" value="Rechercher un utilisateur"></form></li>
         <li><form action="/getactivities" method="post"><input type="submit" value="Accéder aux activités" disabled></form></li>
+        <%  if ( (Boolean)request.getAttribute("admin") ) { %>
+        <li><form action="/getareas" method="post"><input type="submit" value="Accéder aux lieux"></form></li>
+        <%  } %>
         <li><form action="/logout" method="post"><input type="submit" value="Déconnexion"></form></li>
     </ul>
     <div class="paddedNav">
@@ -88,9 +91,11 @@
                 ArrayList<String> addressWhere = (ArrayList<String>) request.getAttribute("addressWhere");
                 ArrayList<String> gpsWhere = (ArrayList<String>) request.getAttribute("gpsWhere");
                 ArrayList<Boolean> participates = (ArrayList<Boolean>) request.getAttribute("participates");
+                Boolean admin = (Boolean) request.getAttribute("admin");
                 String actionUser;
                 String gpsText;
-                String actionActivity;%>
+                String actionActivity;
+                String delActivity;%>
                 <table>
                     <tr>
                         <th>Nom de l'activité</th>
@@ -102,6 +107,9 @@
                         <th>Adresse de l'emplacement</th>
                         <th>Emplacement GPS</th>
                         <th></th>
+                    <%  if (admin) { %>
+                        <th></th>
+                    <%  } %>
                     </tr>
                 <%  for (int i = 0; i < numAct; i++) {
                         actionUser = "Créé par vous" +
@@ -144,6 +152,14 @@
                             <td><%= addressWhere.get(i) %></td>
                             <td><%= gpsText %></td>
                             <td><%= actionActivity %></td>
+                        <%  if ( !isMe.get(i) && admin) {%>
+                            <td>
+                                <form action="/delactivit\" method="post">
+                                    <input type=hidden id="idAct" name="idAct" value=<%= idAct.get(i) %>">
+                                    <input type="submit" value="Supprimer cette activité">
+                                </form>
+                            </td>
+                        <%  } %>
                         </tr>
                 <%  } %>
                 </table>

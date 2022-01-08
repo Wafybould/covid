@@ -188,6 +188,46 @@
     <url-pattern>/covided</url-pattern>
   </servlet-mapping>
 
+  <!-- Managing admins -->
+  <servlet>
+    <servlet-name>manageadmin</servlet-name>
+    <servlet-class>ManageAdmin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>manageadmin</servlet-name>
+    <url-pattern>/manageadmin</url-pattern>
+  </servlet-mapping>
+
+  <!-- Deleting an user -->
+  <servlet>
+    <servlet-name>deluser</servlet-name>
+    <servlet-class>DelUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>deluser</servlet-name>
+    <url-pattern>/deluser</url-pattern>
+  </servlet-mapping>
+
+  <!-- Getting all areas -->
+  <servlet>
+    <servlet-name>getareas</servlet-name>
+    <servlet-class>GetAreas</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>getareas</servlet-name>
+    <url-pattern>/getareas</url-pattern>
+  </servlet-mapping>
+
+  <!-- Deleting an area -->
+  <servlet>
+    <servlet-name>delarea</servlet-name>
+    <servlet-class>DelArea</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>delarea</servlet-name>
+    <url-pattern>/delarea</url-pattern>
+  </servlet-mapping>
+
   <error-page>
     <error-code>404</error-code>
     <location>/error404.jsp</location>

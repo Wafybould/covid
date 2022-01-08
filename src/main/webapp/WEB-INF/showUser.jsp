@@ -21,16 +21,42 @@
     <li><form action="/getnotifs" method="post"><input type="submit" value="Notifications"></form></li>
     <li><form action="/searchuser" method="post"><input type="submit" value="Rechercher un utilisateur"></form></li>
     <li><form action="/getactivities" method="post"><input type="submit" value="Accéder aux activités"></form></li>
+    <%  if ( (Boolean)request.getAttribute("admin") ) { %>
+    <li><form action="/getareas" method="post"><input type="submit" value="Accéder aux lieux"></form></li>
+    <%  } %>
     <li><form action="/logout" method="post"><input type="submit" value="Déconnexion"></form></li>
 </ul>
 <div class="paddedNav">
+<%  Boolean admin = (Boolean) request.getAttribute("admin");
+    Boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
+    String adminButton = "Ajouter cet utilisateur en tant qu'administrateur";
+    if ( isAdmin ){
+        adminButton = "Supprimer cet utilisateur des administrateurs";
+    }
+    int userId = (int) request.getAttribute("userId");%>
     <table>
         <tr>
             <th>Informations personnelles de cet utilisateur</th>
-            <th>Activités récentes à laquelle cet utilisateur a participé</th>
+            <th>Activités récentes à laquelle cet utilisateur participe ou a participé</th>
+        <%  if (admin) { %>
+            <th>Actions relatives à cet utilisateur</th>
+        <%  } %>
         </tr>
         <tr>
             <td>@<%= loginUser %></td>
+            <td></td>
+        <%  if (admin) { %>
+            <td rowspan="4">
+                <form action="/deluser" method="post">
+                    <input type="hidden" id="userId" name="userId" value="<%= userId %>">
+                    <input type="submit" value="Supprimer cet utilisateur">
+                </form>
+                <form action="/manageadmin" method="post">
+                    <input type="hidden" id="userId" name="userId" value="<%= userId %>">
+                    <input type="submit" value="<%= adminButton %>">
+                </form>
+            </td>
+        <%  } %>
         </tr>
         <tr>
             <td><%= request.getAttribute("userName")%> <%= request.getAttribute("userSurname") %></td>
@@ -61,14 +87,14 @@
                             <td>
                                 <form action="/handlerequest" method="post">
                                     <input type="hidden" id="from1" name="from1" value="user">
-                                    <input type="hidden" id="idAccept" name="idAccept" value="<%= request.getAttribute("userId") %>">
+                                    <input type="hidden" id="idAccept" name="idAccept" value="<%= userId %>">
                                     <input type="submit" value="Oui">
                                 </form>
                             </td>
                             <td>
                                 <form action="/handlerequest" method="post">
                                     <input type="hidden" id="from2" name="from2" value="user">
-                                    <input type="hidden" id="idRefuse" name="idRefuse" value="<%= request.getAttribute("userId") %>">
+                                    <input type="hidden" id="idRefuse" name="idRefuse" value="<%= userId %>">
                                     <input type="submit" value="Non">
                                 </form>
                             </td>
@@ -76,7 +102,7 @@
                     </table>
             <%  } else { %>
                 <form action="<%= method %>" method="post">
-                    <input type="hidden" id="userId" name="userId" value="<%= request.getAttribute("userId") %>">
+                    <input type="hidden" id="userId" name="userId" value="<%= userId %>">
                 <%  if (!isFriend) {
                         if (!reqSent) {%>
                             <input type="submit" value="Ajouter cet utilisateur en ami">
