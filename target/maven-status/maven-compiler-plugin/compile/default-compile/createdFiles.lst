@@ -1,5 +1,6 @@
 SearchUser.class
 Register.class
+CreateActivity.class
 Login.class
 GetFriends.class
 ShowUser.class
@@ -9,5 +10,7 @@ DBConnect.class
 Logout.class
 HandleNotif.class
 GetNotifs.class
+DelActivity.class
 GetActivities.class
 DelFriend.class
+JoinActivity.class

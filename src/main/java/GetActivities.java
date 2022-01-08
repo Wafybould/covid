@@ -19,11 +19,9 @@ public class GetActivities extends HttpServlet {
 
             Connection con = DBConnect.initializeDatabase();
             PreparedStatement st = con
-                    .prepareStatement("select activity.*, area.name, area.address, area.GPS from activity inner join area on activity.idArea = area.id where " +
-                            "(idCreator=? or idCreator in (select idFriend from friendslink where idList = (select id from friendslist where idUser = ?)))" +
-                            " order by activity.date desc");
-            st.setInt(1, id);
-            st.setInt(2, id);
+                    .prepareStatement("select activity.*, area.name, area.address, area.GPS " +
+                            "from activity inner join area on activity.idArea = area.id " +
+                            "order by activity.date desc");
             ResultSet rs = st.executeQuery();
             int numAct = 0;
             ArrayList<Integer> idAct = new ArrayList<>();
@@ -39,11 +37,16 @@ public class GetActivities extends HttpServlet {
             ArrayList<String> nameWhere = new ArrayList<>();
             ArrayList<String> addressWhere = new ArrayList<>();
             ArrayList<String> gpsWhere = new ArrayList<>();
+            ArrayList<Boolean> participates = new ArrayList<>();
             int newCreator;
+            int idActivity;
             PreparedStatement st2;
             ResultSet rs2;
+            PreparedStatement st3;
+            ResultSet rs3;
             while(rs.next()){
-                idAct.add(rs.getInt(1));
+                idActivity = rs.getInt(1);
+                idAct.add(idActivity);
                 nameAct.add(rs.getString(2));
                 newCreator = rs.getInt(3);
                 idCreator.add(newCreator);
@@ -52,8 +55,9 @@ public class GetActivities extends HttpServlet {
                 st2.setInt(1, newCreator);
                 rs2 = st2.executeQuery();
                 rs2.next();
-                loginCreator.add(rs.getString(1));
-                nameCreator.add(rs.getString(2) + " " + rs.getString(3));
+                loginCreator.add(rs2.getString(1));
+                nameCreator.add(rs2.getString(2) + " " + rs2.getString(3));
+                st2.close();
                 date.add(rs.getDate(4));
                 startTime.add(rs.getTime(5));
                 endTime.add(rs.getTime(6));
@@ -61,6 +65,13 @@ public class GetActivities extends HttpServlet {
                 nameWhere.add(rs.getString(8));
                 addressWhere.add(rs.getString(9));
                 gpsWhere.add(rs.getString(10));
+                st3 = con.prepareStatement("select count(1) from activitylink where idActivity=? and idUser=?");
+                st3.setInt(1, idActivity);
+                st3.setInt(2, id);
+                rs3 = st3.executeQuery();
+                rs3.next();
+                participates.add(rs3.getInt(1) != 0);
+                st3.close();
                 numAct++;
             }
             st.close();
@@ -106,6 +117,7 @@ public class GetActivities extends HttpServlet {
             request.setAttribute("nameArea", nameArea);
             request.setAttribute("addressArea", addressArea);
             request.setAttribute("gpsArea", gpsArea);
+            request.setAttribute("participates", participates);
             request.setAttribute("name", name);
             request.setAttribute("surname", surname);
             RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/activities.jsp");

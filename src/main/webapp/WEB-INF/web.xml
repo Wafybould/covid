@@ -127,4 +127,34 @@
     <servlet-name>getactivities</servlet-name>
     <url-pattern>/getactivities</url-pattern>
   </servlet-mapping>
+
+  <!-- Creating an activity -->
+  <servlet>
+    <servlet-name>createactivity</servlet-name>
+    <servlet-class>CreateActivity</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>createactivity</servlet-name>
+    <url-pattern>/createactivity</url-pattern>
+  </servlet-mapping>
+
+  <!-- Joining/leaving an activity -->
+  <servlet>
+    <servlet-name>joinactivity</servlet-name>
+    <servlet-class>JoinActivity</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>joinactivity</servlet-name>
+    <url-pattern>/joinactivity</url-pattern>
+  </servlet-mapping>
+
+  <!-- Deleting an activity -->
+  <servlet>
+    <servlet-name>delactivity</servlet-name>
+    <servlet-class>DelActivity</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>delactivity</servlet-name>
+    <url-pattern>/delactivity</url-pattern>
+  </servlet-mapping>
 </web-app>
