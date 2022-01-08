@@ -14,7 +14,8 @@
 <body>
     <ul class="navPad">
         <i class="navTitle"><h2><%= request.getAttribute("name") %> <%= request.getAttribute("surname") %></h2></i>
-        <li><form action="/login" method="post"><input type="submit" value="Retour à l'accueil"></form></li>
+        <li><form action="/login" method="post"><input type="submit" value="Retour à l'accueil" disabled></form></li>
+        <li><form action="/showprofile" method="post"><input type="submit" value="Modifier mon profil"></form></li>
         <li><form action="/getfriends" method="post"><input type="submit" value="Liste d'amis"></form></li>
         <li><form action="/getnotifs" method="post"><input type="submit" value="Notifications"></form></li>
         <li><form action="/searchuser" method="post"><input type="submit" value="Rechercher un utilisateur"></form></li>
@@ -23,6 +24,7 @@
     </ul>
     <div class="paddedNav">
         <div><h1 class="pageTitle">Bonjour <%= request.getAttribute("name") %> <%= request.getAttribute("surname") %></h1></div>
+        <div style="align:center"><form action="/covided" method="post"><input type="submit" value="J'ai attrapé le COVID, me signaler !"></form></div>
     </div>
 </body>
 </html>

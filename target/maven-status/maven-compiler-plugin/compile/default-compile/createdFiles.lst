@@ -8,9 +8,12 @@ HandleRequest.class
 AddFriend.class
 DBConnect.class
 Logout.class
+ShowProfile.class
 HandleNotif.class
 GetNotifs.class
 DelActivity.class
 GetActivities.class
 DelFriend.class
 JoinActivity.class
+Covided.class
+UpdateProfile.class

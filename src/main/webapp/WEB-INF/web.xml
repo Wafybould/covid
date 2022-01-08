@@ -157,4 +157,39 @@
     <servlet-name>delactivity</servlet-name>
     <url-pattern>/delactivity</url-pattern>
   </servlet-mapping>
+
+  <!-- Showing a profile onscreen -->
+  <servlet>
+    <servlet-name>showprofile</servlet-name>
+    <servlet-class>ShowProfile</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>showprofile</servlet-name>
+    <url-pattern>/showprofile</url-pattern>
+  </servlet-mapping>
+
+  <!-- Updating a profile -->
+  <servlet>
+    <servlet-name>updateprofile</servlet-name>
+    <servlet-class>UpdateProfile</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>updateprofile</servlet-name>
+    <url-pattern>/updateprofile</url-pattern>
+  </servlet-mapping>
+
+  <!-- Updating covided status -->
+  <servlet>
+    <servlet-name>covided</servlet-name>
+    <servlet-class>Covided</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>covided</servlet-name>
+    <url-pattern>/covided</url-pattern>
+  </servlet-mapping>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error404.jsp</location>
+  </error-page>
 </web-app>

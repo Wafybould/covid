@@ -16,9 +16,11 @@
 <ul class="navPad">
     <i class="navTitle"><h2><%= request.getAttribute("name") %> <%= request.getAttribute("surname") %></h2></i>
     <li><form action="/login" method="post"><input type="submit" value="Retour à l'accueil"></form></li>
+    <li><form action="/showprofile" method="post"><input type="submit" value="Modifier mon profil"></form></li>
     <li><form action="/getfriends" method="post"><input type="submit" value="Liste d'amis"></form></li>
-    <li><form action="/getnotifs" method="post"><input type="submit" value="Notifications"></form></li>
+    <li><form action="/getnotifs" method="post"><input type="submit" value="Notifications" disabled></form></li>
     <li><form action="/searchuser" method="post"><input type="submit" value="Rechercher un utilisateur"></form></li>
+    <li><form action="/getactivities" method="post"><input type="submit" value="Accéder aux activités"></form></li>
     <li><form action="/logout" method="post"><input type="submit" value="Déconnexion"></form></li>
 </ul>
 <div class="paddedNav">
@@ -41,7 +43,7 @@
                     <th>Date</th>
                     <th>Texte</th>
                     <th>Envoyé par</th>
-                    <th>Action</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
