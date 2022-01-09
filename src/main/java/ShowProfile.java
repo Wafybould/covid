@@ -1,6 +1,7 @@
+import tools.DBConnect;
+
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

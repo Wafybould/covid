@@ -1,3 +1,5 @@
+import tools.DBConnect;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -24,16 +26,22 @@ public class Covided extends HttpServlet {
             Calendar c = Calendar.getInstance();
             c.setTime(dateNow);
             c.add(Calendar.DATE, -7);
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(dateNow);
 
             Connection con = DBConnect.initializeDatabase();
             PreparedStatement st = con.prepareStatement("select idFriend from friendslink where idList = (select id from friendslist where idUser = ?)");
-            PreparedStatement st2 = con.prepareStatement("select idUser from activitylink where idActivity = (select id from activity where idCreator = ?)");
+            PreparedStatement st2 = con.prepareStatement("select idUser from activitylink where idActivity = (select id from activity where idCreator = ? and date >= ? and date <= ?)");
             PreparedStatement st3 = con.prepareStatement("select activity.idCreator, activitylink.idUser from activity inner join activitylink on activity.id = activitylink.idActivity " +
-                    "where activitylink.idUser = ? and activity.date >= ?");
+                    "where activitylink.idUser = ? and activity.date >= ? and activity.date <= ?");
             st.setInt(1, id);
             st2.setInt(1, id);
+            st2.setDate(2, new Date(c.getTimeInMillis()));
+            st2.setDate(3, new Date(c2.getTimeInMillis()));
             st3.setInt(1, id);
             st3.setDate(2, new Date(c.getTimeInMillis()));
+            st3.setDate(3, new Date(c2.getTimeInMillis()));
+
             ResultSet rs = st.executeQuery();
             Set<Integer> set = new HashSet<>();
             while (rs.next()){

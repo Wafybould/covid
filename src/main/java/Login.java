@@ -1,5 +1,7 @@
+import tools.DBConnect;
+import tools.SHA512;
+
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +18,7 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+        RequestDispatcher view = getServletContext().getRequestDispatcher("/index.jsp");
         view.forward(request, response);
     }
 
@@ -32,19 +34,33 @@ public class Login extends HttpServlet {
 
                 Connection con = DBConnect.initializeDatabase();
 
-                PreparedStatement st = con
-                        .prepareStatement("select count(*) from users where login=? and password=?");
+                PreparedStatement st = con.prepareStatement("select salt, password from users where login = ?");
+                st.setString(1, login);
+                ResultSet rs = st.executeQuery();
+                rs.next();
+                String salt = rs.getString(1);
+                String hashedPwd = rs.getString(2);
+                st.close();
+                int len = salt.length();
+                byte[] saltBytes = new byte[len / 2];
+                for (int i = 0; i < len; i += 2) {
+                    saltBytes[i / 2] = (byte) ((Character.digit(salt.charAt(i), 16) << 4)
+                            + Character.digit(salt.charAt(i+1), 16));
+                }
+                String hashPass = SHA512.SHA512Hash(pass, saltBytes);
+
+                st = con.prepareStatement("select count(*) from users where login=? and password=?");
 
                 st.setString(1, login);
-                st.setString(2, pass);
+                st.setString(2, hashPass);
 
-                ResultSet rs = st.executeQuery();
+                rs = st.executeQuery();
 
                 rs.next();
                 if (rs.getInt(1) != 0) {
                     st = con.prepareStatement("select id, name, surname, admin from users where login=? and password=?");
                     st.setString(1, login);
-                    st.setString(2, pass);
+                    st.setString(2, hashPass);
                     rs = st.executeQuery();
                     rs.next();
                     int id = rs.getInt(1);
@@ -63,7 +79,7 @@ public class Login extends HttpServlet {
                     st.close();
                     con.close();
                     request.setAttribute("error", true);
-                    RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+                    RequestDispatcher view = getServletContext().getRequestDispatcher("/index.jsp");
                     view.forward(request, response);
                 }
             }else{
@@ -85,8 +101,9 @@ public class Login extends HttpServlet {
                 view.forward(request, response);
             }
         }catch (SQLException e){
+            e.printStackTrace();
             request.setAttribute("error", true);
-            RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/index.jsp");
+            RequestDispatcher view = getServletContext().getRequestDispatcher("/index.jsp");
             view.forward(request, response);
         }
         catch (ClassNotFoundException ignored) {}

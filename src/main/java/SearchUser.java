@@ -1,3 +1,5 @@
+import tools.DBConnect;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,16 +19,18 @@ public class SearchUser extends HttpServlet {
             if(request.getParameter("type") == null){
                 int id = (int) session.getAttribute("id");
                 Connection con = DBConnect.initializeDatabase();
-                PreparedStatement st = con.prepareStatement("select name, surname from users where id = ?");
+                PreparedStatement st = con.prepareStatement("select name, surname, admin from users where id = ?");
                 st.setInt(1, id);
                 ResultSet rs = st.executeQuery();
                 rs.next();
                 String name = rs.getString(1);
                 String surname = rs.getString(2);
+                Boolean admin = rs.getBoolean(3);
                 st.close();
                 con.close();
                 request.setAttribute("name", name);
                 request.setAttribute("surname", surname);
+                request.setAttribute("admin", admin);
                 RequestDispatcher view = getServletContext().getRequestDispatcher("/WEB-INF/searchUser.jsp");
                 view.forward(request, response);
             } else {

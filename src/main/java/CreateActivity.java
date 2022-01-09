@@ -1,8 +1,11 @@
+import tools.DBConnect;
+
 import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -31,10 +34,17 @@ public class CreateActivity extends HttpServlet {
                 String nameArea = request.getParameter("nameArea");
                 String addressArea = request.getParameter("addressArea");
                 String gpsArea = request.getParameter("gpsArea");
+                Pattern pattern = Pattern.compile("^[(][0-9]*[.][0-9]*,[0-9]*[.][0-9]*[)]$");
+                Matcher matcher = pattern.matcher(gpsArea);
+                if(!matcher.find()){
+                    request.setAttribute("error", true);
+                    RequestDispatcher view = getServletContext().getRequestDispatcher("/getactivities");
+                    view.forward(request, response);
+                }
                 st = con.prepareStatement("insert into area (name, address, GPS) values (?,?,?)");
                 st.setString(1, nameArea);
                 st.setString(2, addressArea);
-                st.setString(3,gpsArea);
+                st.setString(3, gpsArea);
                 st.executeUpdate();
                 st.close();
                 st = con.prepareStatement("select id from area order by id desc limit 1");

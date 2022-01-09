@@ -28,7 +28,15 @@
     </ul>
     <div class="paddedNav">
         <h3>Créer une activité</h3>
-        <%  int numArea = (int) request.getAttribute("numArea");
+        <%  boolean error = false;
+            boolean registered = false;
+            ArrayList<String> names = Collections.list(request.getAttributeNames());
+            for (String s : names){
+                if(s.equals("error")){
+                    error = (boolean)request.getAttribute("error");
+                }
+            }
+            int numArea = (int) request.getAttribute("numArea");
             ArrayList<Integer> idArea = (ArrayList<Integer>)request.getAttribute("idArea");
             ArrayList<String> nameArea = (ArrayList<String>)request.getAttribute("nameArea");
             ArrayList<String> addressArea = (ArrayList<String>)request.getAttribute("addressArea");
@@ -45,7 +53,10 @@
                     desc = nameArea.get(i) + " : " + addressArea.get(i) + gps;
                     options += "<option value=\""+ idArea.get(i) +"\">" + desc + "</option>";
                 }
-            }%>
+            }
+            if (error) {%>
+                <text class="error">Il y a une erreur dans les coordonnées GPS que vous avez rentré.</text>
+        <%  }%>
         <form action="/createactivity" method="post">
             <label>Création de l'activité<br/>
                 <input type="text" id="nameAct" name="nameAct" placeholder="Nom de l'activité" required="required">
@@ -67,7 +78,7 @@
                 <label>Création d'un lieu si celui que vous recherchez n'existe pas
                     <input type="text" id="nameArea" name="nameArea" placeholder="Nom du lieu">
                     <input type="text" id="addressArea" name="addressArea" placeholder="Adresse du lieu">
-                    <input type="text" id="gpsArea" name="gpsArea" placeholder="Emplacement GPS du lieu (optionnel)">
+                    <input type="text" id="gpsArea" name="gpsArea" placeholder="Emplacement GPS de la forme (xx.xxx,xx.xxx) (optionnel)">
                 </label>
                 <input type="submit" value="Créer une activité">
             </label>
@@ -124,12 +135,12 @@
                                 actionActivity = "<form action=\"/joinactivity\" method=\"post\">" +
                                                     "<input type=\"hidden\" id=\"joined\" name=\"joined\" value=\"0\">" +
                                                     "<input type=\"hidden\" id=\"idAct\" name=\"idAct\" value=\"" + idAct.get(i) + "\">" +
-                                                    "<input type=\"submit\" value=\"Participer à cette activité\"></form>";
+                                                    "<input type=\"submit\" value=\"Joindre cette activité\"></form>";
                             } else {
                                 actionActivity = "<form action=\"/joinactivity\" method=\"post\">" +
                                                     "<input type=\"hidden\" id=\"joined\" name=\"joined\" value=\"1\">" +
                                                     "<input type=\"hidden\" id=\"idAct\" name=\"idAct\" value=\"" + idAct.get(i) + "\">" +
-                                                    "<input type=\"submit\" value=\"Ne plus participer à cette activité\"></form>";
+                                                    "<input type=\"submit\" value=\"Quitter cette activité\"></form>";
                             }
                         } else {
                             actionActivity = "<form action=\"/delactivity\" method=\"post\">" +

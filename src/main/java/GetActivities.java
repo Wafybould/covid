@@ -1,3 +1,5 @@
+import tools.DBConnect;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,6 +18,10 @@ public class GetActivities extends HttpServlet {
             HttpSession session = request.getSession();
 
             int id = (int)session.getAttribute("id");
+
+            if(request.getAttribute("error") != null){
+                request.setAttribute("error", true);
+            }
 
             Connection con = DBConnect.initializeDatabase();
             PreparedStatement st = con

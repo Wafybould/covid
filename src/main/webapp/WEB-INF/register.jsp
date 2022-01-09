@@ -27,8 +27,12 @@
             <text class="error">Erreur, des informations sont erronées ou ce nom d'utilisateur est déjà pris</text>
         <%}%>
         <form action="/register" method="post">
-            <input type="text" id="login" class="fadeIn first" name="login" placeholder="Nom d'utilisateur" required="required" minlength="8" maxlength="32">
-            <input type="password" id="pwd" class="fadeIn second" name="pwd" placeholder="Mot de passe" required="required" minlength="8" maxlength="64">
+            <label> Doit contenir au moins 8 caractères
+                <input type="text" id="login" class="fadeIn first" name="login" placeholder="Nom d'utilisateur" required="required" minlength="8" maxlength="32">
+            </label>
+            <label>Doit contenir au moins 8 caractères, une majuscule, une minuscule et un caractère spécial
+                <input type="password" id="pwd" class="fadeIn second" name="pwd" placeholder="Mot de passe" required="required" minlength="8" maxlength="64">
+            </label>
             <input type="text" id="name" class="fadeIn third" name="name" placeholder="Nom" required="required" maxlength="64">
             <input type="text" id="surname" class="fadeIn fourth" name="surname" placeholder="Prénom" required="required" maxlength="64">
             <input type="date" id="birthday" class="fadeIn fifth" name="birthday" placeholder="xx/xx/xxxx" required="required">

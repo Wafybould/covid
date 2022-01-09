@@ -1,10 +1,12 @@
+package tools;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 // This class can be used to initialize the database connection
 public class DBConnect {
-    protected static Connection initializeDatabase()
+    public static Connection initializeDatabase()
             throws SQLException, ClassNotFoundException
     {
         // Initialize all the information regarding
@@ -17,7 +19,6 @@ public class DBConnect {
         String dbPassword = "pKWaglwICNXEGUvT";
 
         Class.forName(dbDriver);
-        Connection con = DriverManager.getConnection(dbURL + dbName, dbUsername, dbPassword);
-        return con;
+        return DriverManager.getConnection(dbURL + dbName, dbUsername, dbPassword);
     }
 }

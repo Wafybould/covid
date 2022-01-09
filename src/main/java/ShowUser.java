@@ -1,3 +1,5 @@
+import tools.DBConnect;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -65,6 +67,55 @@ public class ShowUser extends HttpServlet {
             String userBirthday = rs.getString(4);
             Boolean isAdmin = rs.getBoolean(5);
             st.close();
+
+            st = con.prepareStatement("select activity.*, area.name, area.address, area.GPS from activity " +
+                    "inner join area on activity.idArea = area.id " +
+                    "where (idCreator = ? or exists (select * from activitylink where activitylink.idActivity = activity.id and activitylink.idUser = ?))" +
+                    "order by activity.date desc");
+            st.setInt(1, userId);
+            st.setInt(2, userId);
+            rs = st.executeQuery();
+            int numAct = 0;
+            ArrayList<Integer> idAct = new ArrayList<>();
+            ArrayList<String> nameAct = new ArrayList<>();
+            ArrayList<Integer> idCreator = new ArrayList<>();
+            ArrayList<Boolean> isMe = new ArrayList<>();
+            ArrayList<String> loginCreator = new ArrayList<>();
+            ArrayList<String> nameCreator = new ArrayList<>();
+            ArrayList<java.sql.Date> date = new ArrayList<>();
+            ArrayList<Boolean> participates = new ArrayList<>();
+            int newCreator;
+            int idActivity;
+            PreparedStatement st2;
+            ResultSet rs2;
+            PreparedStatement st3;
+            ResultSet rs3;
+            while(rs.next()){
+                idActivity = rs.getInt(1);
+                idAct.add(idActivity);
+                nameAct.add(rs.getString(2));
+                newCreator = rs.getInt(3);
+                idCreator.add(newCreator);
+                isMe.add(newCreator==id);
+                st2 = con.prepareStatement("select login, name, surname from users where id=?");
+                st2.setInt(1, newCreator);
+                rs2 = st2.executeQuery();
+                rs2.next();
+                loginCreator.add(rs2.getString(1));
+                nameCreator.add(rs2.getString(2) + " " + rs2.getString(3));
+                st2.close();
+                date.add(rs.getDate(4));
+                st3 = con.prepareStatement("select count(1) from activitylink where idActivity=? and idUser=?");
+                st3.setInt(1, idActivity);
+                st3.setInt(2, id);
+                rs3 = st3.executeQuery();
+                rs3.next();
+                participates.add(rs3.getInt(1) != 0);
+                st3.close();
+                numAct++;
+            }
+            st.close();
+
             st = con.prepareStatement("select name, surname, admin from users where id = ?");
             st.setInt(1, id);
             rs = st.executeQuery();
@@ -83,6 +134,15 @@ public class ShowUser extends HttpServlet {
             request.setAttribute("isFriend", isFriend);
             request.setAttribute("reqSent", reqSent);
             request.setAttribute("hasSent", hasSent);
+            request.setAttribute("numAct", numAct);
+            request.setAttribute("idAct", idAct);
+            request.setAttribute("nameAct", nameAct);
+            request.setAttribute("idCreator", idCreator);
+            request.setAttribute("isMe",isMe);
+            request.setAttribute("loginCreator", loginCreator);
+            request.setAttribute("nameCreator", nameCreator);
+            request.setAttribute("date", date);
+            request.setAttribute("participates", participates);
             request.setAttribute("name", name);
             request.setAttribute("surname", surname);
             request.setAttribute("admin", admin);
